@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no"
+    />
+    <meta name="theme-color" content="#0d1014" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <title>Experiment 001 — Off-Script (gray-box)</title>
+    <script type="module" crossorigin src="./assets/index-BjzUSt9Y.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-Dvk7qFkQ.css">
+  </head>
+  <body>
+    <main id="app-shell">
+      <canvas id="game-canvas" aria-label="Experiment 001 render surface"></canvas>
+      <div id="controls" aria-hidden="true">
+        <div id="stick-base" data-active="false"><div id="stick-knob"></div></div>
+      </div>
+      <div id="hud-root"></div>
+      <div id="buttons">
+        <button id="btn-med" class="ctl ctl-med" data-hidden="true" type="button">
+          MED
+        </button>
+        <button id="btn-fire" class="ctl ctl-fire" data-hidden="true" type="button">
+          FIRE
+        </button>
+        <button id="btn-action" class="ctl ctl-action" type="button">STRIKE</button>
+      </div>
+      <div id="runway-status" role="status" aria-live="polite"></div>
+      <div id="rotate-affordance" aria-hidden="true">
+        <span>Rotate to landscape</span>
+      </div>
+      <div id="debug-root"></div>
+    </main>
+  </body>
+</html>
