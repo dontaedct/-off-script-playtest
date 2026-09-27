@@ -1,0 +1,49 @@
+name: Publish Off-Script Playtest
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout host repo
+        uses: actions/checkout@v4
+
+      - name: Enable/configure Pages
+        uses: actions/configure-pages@v5
+        with:
+          enablement: true
+
+      - name: Download verified compiled playtest
+        run: |
+          curl -L --fail --retry 3 -o /tmp/playtest.zip 'https://sdmntprcentralus.oaiusercontent.com/files/00000000-8d00-81f5-9927-f204c80ba17f/raw?se=2026-09-27T06%3A10%3A23Z&sp=r&sv=2026-02-06&sr=b&scid=282e7ff5-e6d6-55cc-9d39-4f575fee23b4&skoid=732f244e-db13-47c3-bcc7-7ee02a9397bc&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-09-26T13%3A20%3A23Z&ske=2026-09-27T13%3A20%3A23Z&sks=b&skv=2026-02-06&sig=mZe5M1LJ/Uv71qw0joXMsIWeZ6WawYLM7lVeZNnm/dc%3D'
+          mkdir -p /tmp/site /tmp/wrapped
+          unzip -q /tmp/playtest.zip -d /tmp/wrapped
+          tar -xf /tmp/wrapped/artifact.tar -C /tmp/site
+          sed -i 's#/Cloud-Agent-Sandbox/#/-off-script-playtest/#g' /tmp/site/index.html
+          rm -f /tmp/site/assets/*.map
+          touch /tmp/site/.nojekyll
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: /tmp/site
+
+      - name: Deploy Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
